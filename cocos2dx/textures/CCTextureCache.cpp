@@ -264,14 +264,9 @@ void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallF
 
     // optimization
 
-    std::string pathKey = path;
+    std::string pathKey = CCFileUtils::sharedFileUtils()->fullPathForFilename(path);
 
-    pathKey = CCFileUtils::sharedFileUtils()->fullPathForFilename(pathKey.c_str());
-
-    texture = (CCTexture2D*)m_pTextures->objectForKey(pathKey.c_str());
-
-    std::string fullpath = pathKey;
-
+    texture = (CCTexture2D*)m_pTextures->objectForKey(pathKey);
 
     if (texture != NULL)
     {
@@ -314,7 +309,7 @@ void CCTextureCache::addImageAsync(const char *path, CCObject *target, SEL_CallF
 
     // generate async struct
     AsyncStruct *data = new AsyncStruct();
-    data->filename = fullpath.c_str();
+    data->filename = pathKey;
     data->target = target;
     data->selector = selector;
 
@@ -403,14 +398,12 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
     
     //pthread_mutex_lock(m_pDictLock);
 
-    std::string pathKey = path;
-
-    pathKey = CCFileUtils::sharedFileUtils()->fullPathForFilename(pathKey.c_str());
+    std::string pathKey = CCFileUtils::sharedFileUtils()->fullPathForFilename(path);
     if (pathKey.size() == 0)
     {
         return NULL;
     }
-    texture = (CCTexture2D*)m_pTextures->objectForKey(pathKey.c_str());
+    texture = (CCTexture2D*)m_pTextures->objectForKey(pathKey);
 
     if (! texture) 
     {
@@ -467,7 +460,7 @@ CCTexture2D * CCTextureCache::addImage(const char * path)
                     // cache the texture file name
                     VolatileTexture::addImageTexture(texture, fullpath.c_str(), eImageFormat);
 #endif
-                    m_pTextures->setObject(texture, pathKey.c_str());
+                    m_pTextures->setObject(texture, pathKey);
                     texture->release();
                 }
                 else
@@ -491,7 +484,7 @@ CCTexture2D * CCTextureCache::addPVRImage(const char* path)
     CCTexture2D* texture = NULL;
     std::string key(path);
     
-    if( (texture = (CCTexture2D*)m_pTextures->objectForKey(key.c_str())) ) 
+    if( (texture = (CCTexture2D*)m_pTextures->objectForKey(key)) ) 
     {
         return texture;
     }
@@ -505,7 +498,7 @@ CCTexture2D * CCTextureCache::addPVRImage(const char* path)
         // cache the texture file name
         VolatileTexture::addImageTexture(texture, fullpath.c_str(), CCImage::kFmtRawData);
 #endif
-        m_pTextures->setObject(texture, key.c_str());
+        m_pTextures->setObject(texture, key);
         texture->autorelease();
     }
     else
@@ -524,7 +517,7 @@ CCTexture2D* CCTextureCache::addETCImage(const char* path)
     CCTexture2D* texture = NULL;
     std::string key(path);
     
-    if( (texture = (CCTexture2D*)m_pTextures->objectForKey(key.c_str())) )
+    if( (texture = (CCTexture2D*)m_pTextures->objectForKey(key)) )
     {
         return texture;
     }
@@ -534,7 +527,7 @@ CCTexture2D* CCTextureCache::addETCImage(const char* path)
     texture = new CCTexture2D();
     if(texture != NULL && texture->initWithETCFile(fullpath.c_str()))
     {
-        m_pTextures->setObject(texture, key.c_str());
+        m_pTextures->setObject(texture, key);
         texture->autorelease();
     }
     else
@@ -564,7 +557,7 @@ CCTexture2D* CCTextureCache::addUIImage(CCImage *image, const char *key)
     do 
     {
         // If key is nil, then create a new texture each time
-        if(key && (texture = (CCTexture2D *)m_pTextures->objectForKey(forKey.c_str())))
+        if(key && (texture = (CCTexture2D *)m_pTextures->objectForKey(forKey)))
         {
             break;
         }
@@ -575,7 +568,7 @@ CCTexture2D* CCTextureCache::addUIImage(CCImage *image, const char *key)
 
         if(key && texture)
         {
-            m_pTextures->setObject(texture, forKey.c_str());
+            m_pTextures->setObject(texture, forKey);
             texture->autorelease();
         }
         else

@@ -178,12 +178,12 @@ void CCSpriteFrameCache::addSpriteFramesWithDictionary(CCDictionary* dictionary,
             CCARRAY_FOREACH(aliases, pObj)
             {
                 std::string oneAlias = ((CCString*)pObj)->getCString();
-                if (m_pSpriteFramesAliases->objectForKey(oneAlias.c_str()))
+                if (m_pSpriteFramesAliases->objectForKey(oneAlias))
                 {
                     CCLOGWARN("cocos2d: WARNING: an alias with name %s already exists", oneAlias.c_str());
                 }
 
-                m_pSpriteFramesAliases->setObject(frameKey, oneAlias.c_str());
+                m_pSpriteFramesAliases->setObject(frameKey, oneAlias);
             }
             frameKey->release();
             // create frame
@@ -388,7 +388,7 @@ void CCSpriteFrameCache::removeSpriteFramesFromTexture(CCTexture2D* texture)
     CCDICT_FOREACH(m_pSpriteFrames, pElement)
     {
         string key = pElement->getStrKey();
-        CCSpriteFrame* frame = (CCSpriteFrame*)m_pSpriteFrames->objectForKey(key.c_str());
+        CCSpriteFrame* frame = (CCSpriteFrame*)m_pSpriteFrames->objectForKey(key);
         if (frame && (frame->getTexture() == texture))
         {
             keysToRemove->addObject(CCString::create(pElement->getStrKey()));

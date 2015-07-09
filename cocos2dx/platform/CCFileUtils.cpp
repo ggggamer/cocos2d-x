@@ -149,7 +149,7 @@ public:
                 // add the dictionary into the pre dictionary
                 CCAssert(! m_tDictStack.empty(), "The state is wrong!");
                 CCDictionary* pPreDict = m_tDictStack.top();
-                pPreDict->setObject(m_pCurDict, m_sCurKey.c_str());
+                pPreDict->setObject(m_pCurDict, m_sCurKey);
             }
 
             m_pCurDict->release();
@@ -191,7 +191,7 @@ public:
 
             if (preState == SAX_DICT)
             {
-                m_pCurDict->setObject(m_pArray, m_sCurKey.c_str());
+                m_pCurDict->setObject(m_pArray, m_sCurKey);
             }
             else if (preState == SAX_ARRAY)
             {
@@ -242,7 +242,7 @@ public:
             }
             else if (SAX_DICT == curState)
             {
-                m_pCurDict->setObject(str, m_sCurKey.c_str());
+                m_pCurDict->setObject(str, m_sCurKey);
             }
             str->release();
         }
@@ -255,7 +255,7 @@ public:
             }
             else if (SAX_DICT == curState)
             {
-                m_pCurDict->setObject(str, m_sCurKey.c_str());
+                m_pCurDict->setObject(str, m_sCurKey);
             }
             str->release();
         }
@@ -269,7 +269,7 @@ public:
             }
             else if (SAX_DICT == curState)
             {
-                m_pCurDict->setObject(pStrValue, m_sCurKey.c_str());
+                m_pCurDict->setObject(pStrValue, m_sCurKey);
             }
 
             pStrValue->release();
@@ -598,7 +598,6 @@ std::string CCFileUtils::fullPathForFilename(const char* pszFileName)
 {
     CCAssert(pszFileName != NULL, "CCFileUtils: Invalid path");
     
-    std::string strFileName = pszFileName;
     if (isAbsolutePath(pszFileName))
     {
         //CCLOG("Return absolute path( %s ) directly.", pszFileName);
